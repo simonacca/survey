@@ -7,6 +7,7 @@
 package survey.android.futuretek.ch.ft_survey;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillsActivity extends BaseActivity {
-    private Button btn_add;
+    private Button addBtn;
     private ListView listview;
     public List<String> _productlist = new ArrayList<String>();
     private ListAdapter adapter;
@@ -31,6 +34,13 @@ public class SkillsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+
+        addBtn = (Button) findViewById(R.id.addSkillBtn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                requestSkill();
+            }
+        });
 
         listview = (ListView) findViewById(R.id.listView);
         View mainTextView = findViewById(R.id.textLayout);
@@ -112,6 +122,20 @@ public class SkillsActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void requestSkill(){
+        openInputDialog(new View.OnClickListener() {
+            public void onClick(View v) {
+                EditText userInput = ((EditText) v.findViewById(R.id.userInput));
+                String skill = userInput.getText().toString();
+
+                if (!(skill == null || skill.isEmpty())) {
+                    insertSkill(skill);
+                    userInput.setText("");
+                }
+            }
+        });
     }
 
 
