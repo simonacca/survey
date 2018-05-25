@@ -83,11 +83,7 @@ public class MainActivity extends BaseActivity {
                     if (userName == null || userName.isEmpty()) {
                         List<String> textArray = new ArrayList<String>(1);
                         textArray.add("Didn't get your name...");
-                        animateText(textArray, new AnimationListDone() {
-                            public void done() {
-                                activateNextButton();
-                            }
-                        });
+
                     } else {
                         getDatabase().put("usersName", userName);
                         List<String> textArray = new ArrayList<String>(2);
