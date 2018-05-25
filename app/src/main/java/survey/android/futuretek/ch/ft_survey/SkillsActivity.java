@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +40,7 @@ public class SkillsActivity extends BaseActivity {
         addBtn = (Button) findViewById(R.id.addSkillBtn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                requestSkill();
+                requestSkill("");
             }
         });
 
@@ -89,6 +91,15 @@ public class SkillsActivity extends BaseActivity {
                 convertView = inflater.inflate(R.layout.list_row, null);
                 viewHolder = new ViewHolder();
                 viewHolder.textView = (TextView) convertView.findViewById(R.id.textView1);
+                viewHolder.textView.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        ViewGroup row = ((ViewGroup)v.getParent());
+                        String id = ((TextView)row.findViewById(R.id.textView1)).getText().toString();
+                        requestSkill(id);
+
+                    }
+                });
+
                 viewHolder.delBtn = (Button) convertView.findViewById(R.id.deleteBtn);
                 viewHolder.delBtn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -124,19 +135,22 @@ public class SkillsActivity extends BaseActivity {
         }
     }
 
-    private void requestSkill(){
+    private void requestSkill(final String oldSkill){
         openInputDialog(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText userInput = ((EditText) v.findViewById(R.id.userInput));
                 String skill = userInput.getText().toString();
 
                 if (!(skill == null || skill.isEmpty())) {
+                    if (!(oldSkill == null || oldSkill.isEmpty())){
+                        getDatabase().deleteSkill(oldSkill);
+                        _productlist.remove(oldSkill);
+                    }
+
                     insertSkill(skill);
-                    userInput.setText("");
+
                 }
             }
         });
     }
-
-
 }
